@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Film Ruleti</string>
+    <string name="title_home">Ana Sayfa</string>
+    <string name="title_dashboard">Profil</string>
+    <string name="btn_google">Google ile Kayıt Ol</string>
+    <string name="text_login">Giriş Yap</string>
+    <string name="btn_register">Kayıt Ol</string>
+    <string name="text_email">E-Mail</string>
+    <string name="text_password_valid">Şifre Tekrar</string>
+    <string name="text_password">Şifre</string>
+    <string name="text_username">Kullanıcı Adı</string>
+    <string name="title_favorites">Favoriler</string>
+    <string name="text_variable">Değişken</string>
+    <string name="text_start">Yeni Rulet Başlat</string>
+    <string name="text_friends">Arkadaşlar</string>
+    <string name="text_logout">Çıkış Yap</string>
+    <string name="text_login_with">Şununla Giriş Yapın</string>
+</resources>

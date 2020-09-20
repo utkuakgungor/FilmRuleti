@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include
+        domain="database"
+        path="Favoriler" />
+    <include
+        domain="sharedpref"
+        path="Ayarlar"/>
+    <!-- Exclude specific shared preferences that contain GCM registration Id -->
+</full-backup-content>
