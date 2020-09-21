@@ -15,4 +15,9 @@
     <string name="text_start">Start New Roulette</string>
     <string name="text_logout">Logout</string>
     <string name="text_login_with">Login With</string>
+    <string name="text_theme">Choose Theme</string>
+    <string name="text_dark">Dark</string>
+    <string name="text_system">Follow System</string>
+    <string name="text_light">Light</string>
+    <string name="text_username_email">Username/E-Mail</string>
 </resources>

@@ -86,8 +86,8 @@
         android:layout_height="wrap_content"
         app:fabSize="normal"
         android:id="@+id/btn_register"
-        android:src="@drawable/ic_baseline_check_24"
+        app:srcCompat="@drawable/ic_baseline_check_24"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/colorWhite" />
+        app:backgroundTint="@color/colorPrimary" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

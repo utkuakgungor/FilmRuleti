@@ -16,4 +16,9 @@
     <string name="text_friends">Arkadaşlar</string>
     <string name="text_logout">Çıkış Yap</string>
     <string name="text_login_with">Şununla Giriş Yapın</string>
+    <string name="text_dark">Koyu</string>
+    <string name="text_light">Açık</string>
+    <string name="text_theme">Tema Seçiniz</string>
+    <string name="text_system">Sistem ile Aynı</string>
+    <string name="text_username_email">Kullanıcı Adı/E-Mail</string>
 </resources>
