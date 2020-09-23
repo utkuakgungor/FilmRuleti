@@ -16,9 +16,28 @@
     <string name="text_friends">Arkadaşlar</string>
     <string name="text_logout">Çıkış Yap</string>
     <string name="text_login_with">Şununla Giriş Yapın</string>
-    <string name="text_dark">Koyu</string>
-    <string name="text_light">Açık</string>
     <string name="text_theme">Tema Seçiniz</string>
-    <string name="text_system">Sistem ile Aynı</string>
     <string name="text_username_email">Kullanıcı Adı/E-Mail</string>
+    <string name="text_settings">Ayarlar</string>
+    <string name="text_privacy">Gizlilik Politikası</string>
+    <string name="text_terms">Şartlar ve Koşullar</string>
+    <string-array name="themes">
+        <item>Sistem ile Aynı</item>
+        <item>Koyu</item>
+        <item>Açık</item>
+    </string-array>
+    <string name="username_taken">Kullanıcı adı alınmış</string>
+    <string name="text_register_error">Kayıt işlemi başarısız. Lütfen yeniden deneyiniz</string>
+    <string name="text_register_success">Kayıt başarılı</string>
+    <string name="text_enter_email">Lütfen E-Mail adresi giriniz</string>
+    <string name="text_enter_fields">Lütfen bütün alanları giriniz</string>
+    <string name="text_enter_username">Lütfen kullanıcı adı giriniz</string>
+    <string name="text_passwords_same">Şifreler aynı değil. Lütfen kontrol ediniz</string>
+    <string name="text_user_already_registered">Kullanıcı başka bir kayıt yöntemi ile zaten kayıtlı</string>
+    <string name="text_username_password">Kullanıcı bulunamadı veya şifre yanlış</string>
+    <string name="text_enter_username_password">Lütfen kullanıcı adı ve şifre giriniz</string>
+    <string name="text_add_friend">Arkadaş Ekleme</string>
+    <string name="text_cancel">Vazgeç</string>
+    <string name="text_user_not_found">Kullanıcı bulunamadı</string>
+    <string name="text_add">Ekle</string>
 </resources>

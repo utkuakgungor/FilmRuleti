@@ -68,29 +68,20 @@
                         android:layout_centerHorizontal="true"
                         android:text="@string/text_start"/>
                 </RelativeLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/profileRelative"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/profileThemeChooser"
-                    android:layout_marginTop="14dp"
-                    android:hint="@string/text_theme">
-
-                    <AutoCompleteTextView
-                        android:inputType="none"
-                        android:enabled="false"
-                        android:id="@+id/filled_exposed_dropdown"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/profileThemeChooser"
+                    android:layout_below="@+id/profileRelative"
+                    android:layout_marginTop="14dp"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/settignButton"
+                    android:text="@string/text_settings"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/settignButton"
                     android:id="@+id/profileLogout"
                     android:layout_marginTop="14dp"
                     android:layout_centerHorizontal="true"

@@ -47,6 +47,6 @@
             android:layout_width="70dp"
             android:background="@color/colorTransparent"
             android:layout_height="70dp"
-            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+            app:srcCompat="@drawable/ic_baseline_bookmark_border_24" />
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -1,7 +1,6 @@
 package com.utkuakgungor.filmruleti.profile;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,15 +8,12 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -50,6 +46,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.utkuakgungor.filmruleti.R;
+import com.utkuakgungor.filmruleti.settings.SettingsActivity;
 import com.utkuakgungor.filmruleti.utils.User;
 
 import java.io.ByteArrayOutputStream;
@@ -59,7 +56,6 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
 
@@ -98,7 +94,7 @@ public class ProfileFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
                 if (Objects.requireNonNull(usernameEdit.getText()).toString().equals("") || Objects.requireNonNull(passwordEdit.getText()).toString().equals("")) {
                     progressBar.setVisibility(View.GONE);
-                    Snackbar.make(v12, "Lütfen kullanıcı adı ve şifre giriniz.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(v12, getResources().getString(R.string.text_enter_username_password), Snackbar.LENGTH_LONG).show();
                 } else {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(usernameEdit.getText().toString()).matches()) {
                         mAuth.signInWithEmailAndPassword(Objects.requireNonNull(usernameEdit.getText()).toString(), Objects.requireNonNull(passwordEdit.getText()).toString())
@@ -109,7 +105,7 @@ public class ProfileFragment extends Fragment {
                                                 .replace(R.id.main_frame, profileFragment).commit();
                                     } else {
                                         progressBar.setVisibility(View.GONE);
-                                        Snackbar.make(v12, "Kullanıcı bulunamadı veya şifre yanlış.", Snackbar.LENGTH_LONG).show();
+                                        Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
                                     }
                                 });
                     } else {
@@ -120,7 +116,7 @@ public class ProfileFragment extends Fragment {
                                 user = snapshot.getValue(User.class);
                                 if (user == null) {
                                     progressBar.setVisibility(View.GONE);
-                                    Snackbar.make(v12, "Kullanıcı bulunamadı veya şifre yanlış.", Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
                                 } else {
                                     mAuth.signInWithEmailAndPassword(user.getEmail(), Objects.requireNonNull(passwordEdit.getText()).toString())
                                             .addOnCompleteListener(requireActivity(), task -> {
@@ -129,7 +125,7 @@ public class ProfileFragment extends Fragment {
                                                     requireActivity().getSupportFragmentManager().beginTransaction()
                                                             .replace(R.id.main_frame, profileFragment).commit();
                                                 } else {
-                                                    Snackbar.make(v12, "Kullanıcı bulunamadı veya şifre yanlış.", Snackbar.LENGTH_LONG).show();
+                                                    Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
                                                 }
                                             });
                                 }
@@ -175,6 +171,11 @@ public class ProfileFragment extends Fragment {
             MaterialTextView usernameText = v.findViewById(R.id.profileName);
             MaterialButton logout = v.findViewById(R.id.profileLogout);
             MaterialButton friendsButton = v.findViewById(R.id.profileFriends);
+            MaterialButton settingButton=v.findViewById(R.id.settignButton);
+            settingButton.setOnClickListener(v1 -> {
+                Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
+            });
             friendsButton.setOnClickListener(v1 -> {
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frame, friendsFragment)
@@ -187,37 +188,6 @@ public class ProfileFragment extends Fragment {
                 mAuth.signOut();
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frame, profileFragment).commit();
-            });
-            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Ayarlar", MODE_PRIVATE);
-            AutoCompleteTextView autoCompleteTextView = v.findViewById(R.id.filled_exposed_dropdown);
-            String[] options = {getResources().getString(R.string.text_system), getResources().getString(R.string.text_dark), getResources().getString(R.string.text_light)};
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), R.layout.option_item, options);
-            autoCompleteTextView.setAdapter(adapter);
-            if (sharedPreferences.contains("Dark")) {
-                autoCompleteTextView.setText(getResources().getString(R.string.text_dark), false);
-            } else if (sharedPreferences.contains("Light")) {
-                autoCompleteTextView.setText(getResources().getString(R.string.text_light), false);
-            } else {
-                autoCompleteTextView.setText(getResources().getString(R.string.text_system), false);
-            }
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-                if (parent.getItemAtPosition(position).toString().equals(requireActivity().getResources().getString(R.string.text_dark))) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editor.remove("Light");
-                    editor.putString("Dark", "Dark");
-                    editor.commit();
-                } else if (parent.getItemAtPosition(position).toString().equals(requireActivity().getResources().getString(R.string.text_light))) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editor.remove("Dark");
-                    editor.putString("Light", "Light");
-                    editor.commit();
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                    editor.remove("Dark");
-                    editor.remove("Light");
-                    editor.commit();
-                }
             });
             if (firebaseUser.getPhotoUrl() != null) {
                 storageReference = FirebaseStorage.getInstance().getReference("profileimages")
@@ -288,12 +258,12 @@ public class ProfileFragment extends Fragment {
                         if (e.getClass().equals(FirebaseAuthUserCollisionException.class)) {
                             FirebaseAuthUserCollisionException exception = (FirebaseAuthUserCollisionException) e;
                             if (exception.getErrorCode().equals("ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")) {
-                                Snackbar.make(requireView(), "Kullanıcı başka bir kayıt yöntemi ile kayıt olmuş.", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(requireView(), getResources().getString(R.string.text_user_already_registered), Snackbar.LENGTH_LONG).show();
                                 index++;
                             }
                         }
                         if (index == 0) {
-                            Snackbar.make(requireView(), "Giriş yapılamadı", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
                         }
                     });
         } else {
@@ -341,12 +311,12 @@ public class ProfileFragment extends Fragment {
                         if (e.getClass().equals(FirebaseAuthUserCollisionException.class)) {
                             FirebaseAuthUserCollisionException exception = (FirebaseAuthUserCollisionException) e;
                             if (exception.getErrorCode().equals("ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")) {
-                                Snackbar.make(requireView(), "Kullanıcı başka bir kayıt yöntemi ile kayıt olmuş.", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(requireView(), getResources().getString(R.string.text_user_already_registered), Snackbar.LENGTH_LONG).show();
                                 index++;
                             }
                         }
                         if (index == 0) {
-                            Snackbar.make(requireView(), "Giriş yapılamadı", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
                         }
                     });
         }
@@ -408,10 +378,10 @@ public class ProfileFragment extends Fragment {
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            Toast.makeText(requireContext(), "Giriş yapıldı", Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.text_register_success), Toast.LENGTH_LONG).show();
             FirebaseGoogleAuth(Objects.requireNonNull(account));
         } catch (ApiException e) {
-            Snackbar.make(requireView(), "Giriş yapılamadı", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -430,7 +400,7 @@ public class ProfileFragment extends Fragment {
                     .replace(R.id.main_frame, profileFragment).commit();
         }).addOnFailureListener(e -> {
             progressBar.setVisibility(View.GONE);
-            Snackbar.make(requireView(), "Giriş yapılamadı", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
         });
     }
 }

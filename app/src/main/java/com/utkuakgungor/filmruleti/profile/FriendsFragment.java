@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,8 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.utkuakgungor.filmruleti.R;
 import com.utkuakgungor.filmruleti.utils.Friends;
 import com.utkuakgungor.filmruleti.utils.FriendsAdapter;
-import com.utkuakgungor.filmruleti.utils.SwipeToDeleteCallback;
-import com.utkuakgungor.filmruleti.utils.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,14 +120,14 @@ public class FriendsFragment extends Fragment {
         FloatingActionButton addButton = v.findViewById(R.id.btn_add);
         addButton.setOnClickListener(v1 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setTitle("Arkadaş Ekleme");
+            builder.setTitle(getResources().getString(R.string.text_add_friend));
             View friendView = inflater.inflate(R.layout.friend_input, null);
             builder.setView(friendView);
-            builder.setPositiveButton("Ekle", (dialog, which) -> {
+            builder.setPositiveButton(getResources().getString(R.string.text_add), (dialog, which) -> {
                 EditText editText = friendView.findViewById(R.id.friendUsernameEdit);
                 String userName = Objects.requireNonNull(editText.getText()).toString().trim();
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(userName).matches()) {
-                    Snackbar.make(v1, "Lütfen kullanıcı adı giriniz.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(v1, getResources().getString(R.string.text_enter_username), Snackbar.LENGTH_LONG).show();
                 } else {
                     referenceUsers = FirebaseDatabase.getInstance().getReference("Users").child(userName);
                     referenceUsers.addChildEventListener(new ChildEventListener() {
@@ -164,7 +160,7 @@ public class FriendsFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (userNumber == 0) {
-                                Snackbar.make(v1, "Kullanıcı bulunamadı.", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(v1, getResources().getString(R.string.text_user_not_found), Snackbar.LENGTH_LONG).show();
                             } else {
                                 Friends friends = new Friends();
                                 friends.setUsername(userName);
@@ -180,35 +176,10 @@ public class FriendsFragment extends Fragment {
                     });
                 }
             });
-            builder.setNegativeButton("Vazgeç", (dialog, which) -> dialog.cancel());
+            builder.setNegativeButton(getResources().getString(R.string.text_cancel), (dialog, which) -> dialog.cancel());
 
             builder.show();
         });
         return v;
-    }
-
-    private void enableSwipeToDelete() {
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getContext()) {
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition();
-                final Friends item = result.get(position);
-                referenceFriends.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String deneme;
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-                adapter.removeItem(position);
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
     }
 }
