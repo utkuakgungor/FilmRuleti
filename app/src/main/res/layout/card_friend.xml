@@ -12,19 +12,30 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/friendImage"
+            android:src="@drawable/ic_baseline_account_circle_24"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/friendUsername"
+            android:layout_toEndOf="@+id/friendImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:text="@string/text_variable"/>
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/friendImage"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
+        <ImageButton
             android:layout_width="70dp"
-            android:layout_height="70dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_height="70dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:background="@color/colorTransparent"
+            android:id="@+id/friendDelete"/>
+
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

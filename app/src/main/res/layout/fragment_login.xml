@@ -10,6 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/loginBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/loginUsernameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -95,18 +102,10 @@
                 android:layout_marginTop="14dp">
 
                 <ImageButton
-                    android:id="@+id/facebookLogin"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/colorTransparent"
-                    android:src="@drawable/ic_facebook" />
-
-                <ImageButton
                     android:id="@+id/githubLogin"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/facebookLogin"
                     android:backgroundTint="@color/colorTransparent"
                     android:src="@drawable/ic_github" />
 

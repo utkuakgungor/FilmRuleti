@@ -8,6 +8,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/registerBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
         <com.google.android.material.textfield.TextInputLayout
             app:boxStrokeColor="@color/colorPrimary"
             android:id="@+id/editUsernameLayout"
