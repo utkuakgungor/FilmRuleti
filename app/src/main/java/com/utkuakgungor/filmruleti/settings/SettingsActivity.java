@@ -2,11 +2,10 @@ package com.utkuakgungor.filmruleti.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -14,13 +13,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.utkuakgungor.filmruleti.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -31,6 +27,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         MaterialButton privacyButton = findViewById(R.id.privacyButton);
         MaterialButton termsButton = findViewById(R.id.termsButton);
+        ImageButton tmdbButton = findViewById(R.id.tmdbButton);
+
+        tmdbButton.setOnClickListener(v -> {
+            Uri uriUrl = Uri.parse("https://www.themoviedb.org/");
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        });
 
         privacyButton.setOnClickListener(v -> {
             Intent privacyIntent = new Intent(this,WebViewActivity.class);

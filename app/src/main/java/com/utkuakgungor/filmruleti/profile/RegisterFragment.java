@@ -11,10 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +33,7 @@ public class RegisterFragment extends Fragment {
     private FirebaseAuth mAuth;
     private User user;
     private DatabaseReference reference;
-    private ProfileFragment homeFragment;
+    private ProfileFragment profileFragment;
     private Integer usernameNumber = 0;
     private ProgressBar progressBar;
 
@@ -41,7 +43,7 @@ public class RegisterFragment extends Fragment {
         TextInputEditText usernameEdit = v.findViewById(R.id.editUsername);
         TextInputEditText passwordEdit = v.findViewById(R.id.editPassword);
         progressBar = v.findViewById(R.id.registerBar);
-        homeFragment = new ProfileFragment();
+        profileFragment = new ProfileFragment();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         TextInputEditText passwordValidEdit = v.findViewById(R.id.editPasswordValid);
         TextInputEditText emailEdit = v.findViewById(R.id.editEmail);
@@ -109,9 +111,22 @@ public class RegisterFragment extends Fragment {
                                     Toast.makeText(getContext(), getResources().getString(R.string.text_register_success), Toast.LENGTH_LONG).show();
                                     requireActivity().getSupportFragmentManager().popBackStack();
                                     requireActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.main_frame, homeFragment).commit();
+                                            .replace(R.id.main_frame, profileFragment).commit();
                                 } else {
                                     Snackbar.make(v1, getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
+                                }
+                            }).addOnFailureListener(e -> {
+                                progressBar.setVisibility(View.GONE);
+                                int index = 0;
+                                if (e.getClass().equals(FirebaseAuthUserCollisionException.class)) {
+                                    FirebaseAuthUserCollisionException exception = (FirebaseAuthUserCollisionException) e;
+                                    if (exception.getErrorCode().equals("ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")) {
+                                        Snackbar.make(requireView(), getResources().getString(R.string.text_user_already_registered), Snackbar.LENGTH_LONG).show();
+                                        index++;
+                                    }
+                                }
+                                if (index == 0) {
+                                    Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
                                 }
                             });
                 } else {

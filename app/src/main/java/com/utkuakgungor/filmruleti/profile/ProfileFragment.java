@@ -98,15 +98,14 @@ public class ProfileFragment extends Fragment {
                 } else {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(usernameEdit.getText().toString()).matches()) {
                         mAuth.signInWithEmailAndPassword(Objects.requireNonNull(usernameEdit.getText()).toString(), Objects.requireNonNull(passwordEdit.getText()).toString())
-                                .addOnCompleteListener(requireActivity(), task -> {
-                                    if (task.isSuccessful()) {
-                                        progressBar.setVisibility(View.GONE);
-                                        requireActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.main_frame, profileFragment).commit();
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
-                                    }
+                                .addOnSuccessListener(authResult -> {
+                                    progressBar.setVisibility(View.GONE);
+                                    requireActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.main_frame, profileFragment).commit();
+                                })
+                                .addOnFailureListener(e -> {
+                                    progressBar.setVisibility(View.GONE);
+                                    Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
                                 });
                     } else {
                         reference = FirebaseDatabase.getInstance().getReference("Users").child(usernameEdit.getText().toString().trim());
@@ -119,14 +118,14 @@ public class ProfileFragment extends Fragment {
                                     Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
                                 } else {
                                     mAuth.signInWithEmailAndPassword(user.getEmail(), Objects.requireNonNull(passwordEdit.getText()).toString())
-                                            .addOnCompleteListener(requireActivity(), task -> {
-                                                if (task.isSuccessful()) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    requireActivity().getSupportFragmentManager().beginTransaction()
-                                                            .replace(R.id.main_frame, profileFragment).commit();
-                                                } else {
-                                                    Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
-                                                }
+                                            .addOnSuccessListener(authResult -> {
+                                                progressBar.setVisibility(View.GONE);
+                                                requireActivity().getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.main_frame, profileFragment).commit();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                progressBar.setVisibility(View.GONE);
+                                                Snackbar.make(v12, getResources().getString(R.string.text_username_password), Snackbar.LENGTH_LONG).show();
                                             });
                                 }
                             }
@@ -387,20 +386,33 @@ public class ProfileFragment extends Fragment {
 
     private void FirebaseGoogleAuth(GoogleSignInAccount account) {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
-            user = new User();
-            user.setUsername(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
-            user.setEmail(mAuth.getCurrentUser().getEmail());
-            user.setPicture("Boş");
-            FirebaseDatabase.getInstance().getReference("Users")
-                    .child((Objects.requireNonNull(mAuth.getCurrentUser().getDisplayName())))
-                    .setValue(user);
-            progressBar.setVisibility(View.GONE);
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.main_frame, profileFragment).commit();
+        mAuth.signInWithCredential(authCredential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                user = new User();
+                user.setUsername(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
+                user.setEmail(mAuth.getCurrentUser().getEmail());
+                user.setPicture("Boş");
+                FirebaseDatabase.getInstance().getReference("Users")
+                        .child((Objects.requireNonNull(mAuth.getCurrentUser().getDisplayName())))
+                        .setValue(user);
+                progressBar.setVisibility(View.GONE);
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_frame, profileFragment).commit();
+            }
         }).addOnFailureListener(e -> {
             progressBar.setVisibility(View.GONE);
-            Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
+            int index = 0;
+            if (e.getClass().equals(FirebaseAuthUserCollisionException.class)) {
+                FirebaseAuthUserCollisionException exception = (FirebaseAuthUserCollisionException) e;
+                if (exception.getErrorCode().equals("ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")) {
+                    Snackbar.make(requireView(), getResources().getString(R.string.text_user_already_registered), Snackbar.LENGTH_LONG).show();
+                    index++;
+                }
+            }
+            if (index == 0) {
+                Snackbar.make(requireView(), getResources().getString(R.string.text_register_error), Snackbar.LENGTH_LONG).show();
+            }
         });
     }
 }

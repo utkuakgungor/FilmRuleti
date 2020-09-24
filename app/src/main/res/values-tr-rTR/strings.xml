@@ -26,6 +26,7 @@
         <item>Koyu</item>
         <item>Açık</item>
     </string-array>
+    <string name="themoviedb">Film bilgileri,film resimleri,oyuncu bilgileri,oyuncu resimleri,yönetmen bilgileri ve yönetmen resimleri The Movie DB\'den alınmaktadır</string>
     <string name="username_taken">Kullanıcı adı alınmış</string>
     <string name="text_register_error">Kayıt işlemi başarısız. Lütfen yeniden deneyiniz</string>
     <string name="text_register_success">Kayıt başarılı</string>
